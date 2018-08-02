@@ -1,3 +1,43 @@
+![npm version](https://img.shields.io/badge/node-v8.11.3-green.svg)
+![npm version](https://img.shields.io/badge/npm-5.6.0-blue.svg)
+
+
+## Stack
+* State Management
+	* [Redux](https://github.com/reactjs/redux)
+	* [Redux persist](https://github.com/rt2zz/redux-persist)
+	* [Ducks pattern](https://github.com/erikras/ducks-modular-redux)
+* Side effects
+    * [Redux Observable](https://github.com/redux-observable/redux-observable/)
+    * [RxJS 6](https://github.com/ReactiveX/rxjs)
+* UI Kit
+    * [ant-design](https://github.com/ant-design/ant-design)
+* Grid layout
+    * [react-flexbox-grid](https://github.com/roylee0704/react-flexbox-grid)
+* CSS
+	* [Less](https://github.com/less/less.js)
+* Lint tools
+	* [Eslint](https://github.com/eslint/eslint)
+		* [Aribnb JS style guide](https://github.com/airbnb/javascript)
+* Generator
+    * [create-react-app](https://github.com/facebook/create-react-app)
+
+
+#### Install dependencies
+	npm install
+
+
+#### Start dev server
+	npm start
+
+#### Run tests
+    npm run test
+
+I had no time for tests.
+
+
+# create-react-app README
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
@@ -300,7 +340,7 @@ In the WebStorm menu `Run` select `Edit Configurations...`. Then click `+` and s
 
 Start your app by running `npm start`, then press `^D` on macOS or `F9` on Windows and Linux or click the green debug icon to start debugging in WebStorm.
 
-The same way you can debug your application in IntelliJ IDEA Ultimate, PhpStorm, PyCharm Pro, and RubyMine. 
+The same way you can debug your application in IntelliJ IDEA Ultimate, PhpStorm, PyCharm Pro, and RubyMine.
 
 ## Formatting Code Automatically
 
@@ -1675,7 +1715,7 @@ Use the following [`launch.json`](https://code.visualstudio.com/docs/editor/debu
       "name": "Debug CRA Tests",
       "type": "node",
       "request": "launch",
-      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/react-scripts",      
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/react-scripts",
       "args": [
         "test",
         "--runInBand",
@@ -1989,7 +2029,7 @@ If you’re using [Apache HTTP Server](https://httpd.apache.org/), you need to c
     RewriteRule ^ index.html [QSA,L]
 ```
 
-It will get copied to the `build` folder when you run `npm run build`. 
+It will get copied to the `build` folder when you run `npm run build`.
 
 If you’re using [Apache Tomcat](http://tomcat.apache.org/), you need to follow [this Stack Overflow answer](https://stackoverflow.com/a/41249464/4878474).
 
@@ -2423,13 +2463,13 @@ This will only work for locales that have been explicitly imported before.
 
 Some third-party packages don't compile their code to ES5 before publishing to npm. This often causes problems in the ecosystem because neither browsers (except for most modern versions) nor some tools currently support all ES6 features. We recommend to publish code on npm as ES5 at least for a few more years.
 
-<br>
+<br>w
 To resolve this:
 
 1. Open an issue on the dependency's issue tracker and ask that the package be published pre-compiled.
   * Note: Create React App can consume both CommonJS and ES modules. For Node.js compatibility, it is recommended that the main entry point is CommonJS. However, they can optionally provide an ES module entry point with the `module` field in `package.json`. Note that **even if a library provides an ES Modules version, it should still precompile other ES6 features to ES5 if it intends to support older browsers**.
 
-2. Fork the package and publish a corrected version yourself. 
+2. Fork the package and publish a corrected version yourself.
 
 3. If the dependency is small enough, copy it to your `src/` folder and treat it as application code.
 
@@ -2442,3 +2482,4 @@ In the future, we might start automatically compiling incompatible third-party m
 ## Something Missing?
 
 If you have ideas for more “How To” recipes that should be on this page, [let us know](https://github.com/facebookincubator/create-react-app/issues) or [contribute some!](https://github.com/facebookincubator/create-react-app/edit/master/packages/react-scripts/template/README.md)
+
