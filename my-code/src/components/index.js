@@ -1,9 +1,9 @@
-import Post from './Post'
+import MovieCard from './MovieCard'
 
 export {
-    Post
+    MovieCard
 }
 
 export default {
-    Post
+    MovieCard
 }

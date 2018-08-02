@@ -5,11 +5,12 @@ import { IntlProvider } from 'react-intl'
 import { BrowserRouter } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
 import { store, persistor } from 'store/store'
+import labels from 'i18n'
 import './index.css'
 import App from './App'
 import registerServiceWorker from './registerServiceWorker'
 
-persistor.pause()
+console.log( labels )
 
 ReactDOM.render(
     (
@@ -18,6 +19,7 @@ ReactDOM.render(
         >
             <IntlProvider
                 locale="en"
+                messages={labels}
             >
                 <PersistGate
                     persistor={persistor}

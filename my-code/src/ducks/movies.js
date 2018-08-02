@@ -3,7 +3,7 @@
 */
 import { fromEvent, of } from 'rxjs'
 import {
-    map, catchError, debounceTime, switchMap, retryWhen, takeUntil
+    map, catchError, debounceTime, switchMap, retryWhen, take, takeUntil
 } from 'rxjs/operators'
 import { ofType } from 'redux-observable'
 
@@ -14,22 +14,22 @@ import initialState from 'store/state'
 const GET_MOVIES = 'GET_MOVIES'
 const GET_MOVIES_SUCCESS = 'GET_MOVIES_SUCCESS'
 const GET_MOVIES_ERROR = 'GET_MOVIES_ERROR'
-const GET_MOVIES_CANCEL = 'GET_MOVIES_ERROR'
+const GET_MOVIES_CANCEL = 'GET_MOVIES_CANCEL'
 
 const GET_MOVIE = 'GET_MOVIE'
 const GET_MOVIE_SUCCESS = 'GET_MOVIE_SUCCESS'
 const GET_MOVIE_ERROR = 'GET_MOVIE_ERROR'
-const GET_MOVIE_CANCEL = 'GET_MOVIE_ERROR'
+const GET_MOVIE_CANCEL = 'GET_MOVIE_CANCEL'
 
 const { movies: { search: defaultParams } } = initialState
-export const fetchMovies = ( params = defaultParams ) => ( { type: GET_MOVIES, params } )
+export const fetchMovies = ( searchParams = defaultParams ) => ( { type: GET_MOVIES, searchParams } )
 export const fetchMoviesSuccess = list => ( { type: GET_MOVIES_SUCCESS, list, lastUpdated: Date.now() } )
-export const fetchMoviesError = error => ( { type: GET_MOVIES_ERROR, error } )
+export const fetchMoviesError = listError => ( { type: GET_MOVIES_ERROR, listError } )
 export const cancelGetMoviesRequest = () => ( { type: GET_MOVIES_CANCEL } )
 
 export const fetchMovie = movieId => ( { type: GET_MOVIE, movieId } )
 export const fetchMovieSuccess = detail => ( { type: GET_MOVIE_SUCCESS, detail, lastUpdated: Date.now() } )
-export const fetchMovieError = error => ( { type: GET_MOVIE_ERROR, error } )
+export const fetchMovieError = detailError => ( { type: GET_MOVIE_ERROR, detailError } )
 export const cancelGetMovieRequest = () => ( { type: GET_MOVIE_CANCEL } )
 
 
@@ -38,12 +38,12 @@ export default {
     epics: {
         getMoviesEpic: action$ => action$.pipe(
             ofType( GET_MOVIES ),
-            debounceTime( 3000 ),
+            debounceTime( 1000 ),
             switchMap(
-                ( { params } ) => (
+                ( { searchParams } ) => (
                     api.get( {
                         uri: 'http://www.omdbapi.com',
-                        params
+                        params: searchParams
                     } ).pipe(
                         map(
                             ( { Error, Search } ) => Error ? (
@@ -52,6 +52,7 @@ export default {
                                 fetchMoviesSuccess( Search )
                             )
                         ),
+                        take( 1 ),
                         retryWhen( () => fromEvent( navigator, 'onLine' ) ),
                         takeUntil( action$.ofType( GET_MOVIES_CANCEL ) ),
                         catchError(
@@ -65,7 +66,7 @@ export default {
         ),
         getMovieEpic: action$ => action$.pipe(
             ofType( GET_MOVIE ),
-            debounceTime( 3000 ),
+            debounceTime( 1000 ),
             switchMap(
                 ( { movieId } ) => (
                     api.get( {
@@ -81,11 +82,12 @@ export default {
                                 fetchMovieSuccess( detail )
                             )
                         ),
+                        take( 1 ),
                         retryWhen( () => fromEvent( navigator, 'onLine' ) ),
                         takeUntil( action$.ofType( GET_MOVIE_CANCEL ) ),
                         catchError(
                             () => of(
-                                fetchMoviesError( { action: GET_MOVIE } )
+                                fetchMovieError( { action: GET_MOVIE } )
                             )
                         )
                     )
@@ -96,12 +98,12 @@ export default {
 
     reducers: {
 
-        [GET_MOVIES]: ( state, params ) => ( {
+        [GET_MOVIES]: ( state, { searchParams } ) => ( {
             ...state,
             isFetching: true,
-            params: {
-                ...state.params,
-                ...params
+            search: {
+                ...state.search,
+                ...searchParams
             }
         } ),
 
@@ -113,9 +115,10 @@ export default {
             isFetching: false
         } ),
 
-        [GET_MOVIES_ERROR]: ( state, { error } ) => ( {
+        [GET_MOVIES_ERROR]: ( state, { listError } ) => ( {
             ...state,
-            error,
+            listError,
+            list: [],
             isFetching: false
         } ),
 
@@ -130,9 +133,9 @@ export default {
             isFetching: false
         } ),
 
-        [GET_MOVIE_ERROR]: ( state, { error } ) => ( {
+        [GET_MOVIE_ERROR]: ( state, { detailError } ) => ( {
             ...state,
-            error,
+            detailError,
             isFetching: false
         } )
     }

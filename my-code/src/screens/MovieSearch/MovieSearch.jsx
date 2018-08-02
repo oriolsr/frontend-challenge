@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl'
 import { Grid, Row, Col } from 'react-flexbox-grid'
-import {
-    Link
-} from 'react-router-dom'
-
+import Input from 'antd/lib/input'
+import 'antd/lib/input/style/css'
+import Icon from 'antd/lib/icon'
+import 'antd/lib/icon/style/css'
+import { MovieCard } from 'components'
+import NoResultsImage from 'assets/search/illustration-empty-state.png'
 import { fetchMovies, cancelGetMoviesRequest } from 'ducks/movies'
 import './MovieSearch.less'
 
@@ -14,8 +17,10 @@ class MovieSearch extends Component {
         moviesError: PropTypes.object,
         moviesList: PropTypes.array,
         moviesSearch: PropTypes.object,
+        moviesFetching: PropTypes.bool,
         cancelGetMoviesRequest: PropTypes.func,
-        fetchMovies: PropTypes.func
+        fetchMovies: PropTypes.func,
+        intl: intlShape.isRequired
     }
 
     componentWillUnmount() {
@@ -26,7 +31,15 @@ class MovieSearch extends Component {
 
     render() {
         const {
-            fetchMovies, moviesList // eslint-disable-line no-shadow
+            fetchMovies, // eslint-disable-line no-shadow
+            moviesSearch: { s },
+            moviesList,
+            moviesFetching,
+            intl: {
+                messages: {
+                    movieSearchErrorImageAlt
+                }
+            }
         } = this.props
 
         return (
@@ -37,9 +50,16 @@ class MovieSearch extends Component {
                 <Row>
                     <Col
                         md={12}
+                        className="search-bar"
                     >
-                        <input
-                            type="text"
+                        <Input
+                            defaultValue={s}
+                            prefix={(
+                                <Icon
+                                    type={moviesFetching ? 'loading' : 'search'}
+                                />
+                            )}
+                            suffix={null}
                             onChange={e => fetchMovies( { s: e.target.value } )}
                         />
                     </Col>
@@ -50,27 +70,45 @@ class MovieSearch extends Component {
                             ( {
                                 Title,
                                 Poster,
+                                Year,
                                 imdbID
                             } ) => (
-                                <Col
-                                    xs={6}
-                                    md={2}
-                                >
-                                    <Link
-                                        to={`/movie/${imdbID}`}
-                                    >
-                                        <img
-                                            src={Poster}
-                                            alt={Title}
-                                            style={{
-                                                width: '100%',
-                                                maxWidth: '100%'
-                                            }}
-                                        />
-                                    </Link>
-                                </Col>
+                                <MovieCard
+                                    key={imdbID}
+                                    Title={Title}
+                                    Poster={Poster}
+                                    Year={Year}
+                                    imdbID={imdbID}
+                                />
                             )
                         )
+                    }
+                    {
+                        !moviesList.length ? (
+                            <React.Fragment>
+                                <Col md={4} xs={0} />
+                                <Col
+                                    md={4}
+                                    className="no-results"
+                                >
+                                    <img
+                                        src={NoResultsImage}
+                                        alt={movieSearchErrorImageAlt}
+                                    />
+                                    <h2>
+                                        <FormattedMessage
+                                            id="movieSearchErrorTitle"
+                                        />
+                                    </h2>
+                                    <p>
+                                        <FormattedMessage
+                                            id="movieSearchErrorHint"
+                                        />
+                                    </p>
+                                </Col>
+                                <Col md={4} xs={0} />
+                            </React.Fragment>
+                        ) : null
                     }
                 </Row>
             </Grid>
@@ -83,15 +121,17 @@ export default connect(
         movies: {
             list,
             search,
-            error
+            listError,
+            isFetching
         }
     } ) => ( {
         moviesList: list,
         moviesSearch: search,
-        moviesError: error
+        moviesError: listError,
+        moviesFetching: isFetching
     } ),
     dispatch => ( {
         fetchMovies: ( ...args ) => dispatch( fetchMovies( ...args ) ),
         cancelGetMoviesRequest: () => dispatch( cancelGetMoviesRequest() )
     } )
-)( MovieSearch )
+)( injectIntl( MovieSearch ) )

@@ -1,11 +1,3 @@
-import posts from './posts'
+import labels from './labels'
 
-export {
-    posts
-}
-
-export default {
-    labels: {
-        posts
-    }
-}
+export default labels

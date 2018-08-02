@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { Grid, Row, Col } from 'react-flexbox-grid'
+import GoBackImage from 'assets/icons/icon-arrow-grey.svg'
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl'
+import { fetchMovie, fetchMovieSuccess as clearMovie, cancelGetMovieRequest } from 'ducks/movies'
 
-import { fetchMovie, cancelGetMovieRequest } from 'ducks/movies'
+import './MovieDetail.less'
 
 class MovieDetail extends Component {
     static propTypes = {
@@ -13,7 +17,10 @@ class MovieDetail extends Component {
         isFetching: PropTypes.bool,
 
         fetchMovie: PropTypes.func,
-        cancelGetMovieRequest: PropTypes.func
+        clearMovie: PropTypes.func,
+        cancelGetMovieRequest: PropTypes.func,
+
+        intl: intlShape.isRequired
     }
 
     componentWillMount() {
@@ -26,9 +33,10 @@ class MovieDetail extends Component {
     }
 
     componentWillUnmount() {
-        const { cancelGetMovieRequest } = this.props // eslint-disable-line no-shadow
+        const { clearMovie, cancelGetMovieRequest } = this.props // eslint-disable-line no-shadow
 
         cancelGetMovieRequest()
+        clearMovie()
     }
 
     render() {
@@ -44,15 +52,35 @@ class MovieDetail extends Component {
                 Year,
                 Runtime,
                 Rated
+            },
+            intl: {
+                messages: {
+                    movieDetailGoBackImageAlt
+                }
             }
         } = this.props
 
         return (
-            <Grid fluid>
+            <Grid
+                fluid
+                className="movie-detail"
+            >
                 <Row>
                     <Col
                         md={5}
                     >
+                        <Col
+                            md={12}
+                        >
+                            <Link
+                                to="/"
+                            >
+                                <img
+                                    src={GoBackImage}
+                                    alt={movieDetailGoBackImageAlt}
+                                />
+                            </Link>
+                        </Col>
                         <Col
                             md={12}
                         >
@@ -86,9 +114,13 @@ class MovieDetail extends Component {
                                             Value
                                         } ) => (
                                             <div>
-                                                {Source}
+                                                <span>
+                                                    {Source}
+                                                </span>
                                                 <br />
-                                                {Value}
+                                                <span>
+                                                    {Value}
+                                                </span>
                                             </div>
                                         )
                                     )
@@ -98,6 +130,9 @@ class MovieDetail extends Component {
                         <Col
                             md={12}
                         >
+                            <FormattedMessage
+                                id="movieDetailPlot"
+                            />
                             <p>
                                 {Plot}
                             </p>
@@ -110,7 +145,9 @@ class MovieDetail extends Component {
                                     md={4}
                                 >
                                     <h4>
-                                        Cast
+                                        <FormattedMessage
+                                            id="movieDetailCast"
+                                        />
                                     </h4>
                                     <p>
                                         {Actors}
@@ -120,7 +157,9 @@ class MovieDetail extends Component {
                                     md={4}
                                 >
                                     <h4>
-                                        Genre
+                                        <FormattedMessage
+                                            id="movieDetailGenre"
+                                        />
                                     </h4>
                                     <p>
                                         {Genre}
@@ -130,7 +169,9 @@ class MovieDetail extends Component {
                                     md={4}
                                 >
                                     <h4>
-                                        Director
+                                        <FormattedMessage
+                                            id="movieDetailDirector"
+                                        />
                                     </h4>
                                     <p>
                                         {Director}
@@ -165,16 +206,17 @@ connect(
     ( {
         movies: {
             detail,
-            error,
+            detailError,
             isFetching
         }
     } ) => ( {
         movieDetail: detail,
-        movieError: error,
+        movieError: detailError,
         isFetching
     } ),
     dispatch => ( {
         fetchMovie: ( ...args ) => dispatch( fetchMovie( ...args ) ),
+        clearMovie: () => dispatch( clearMovie( {} ) ),
         cancelGetMovieRequest: () => dispatch( cancelGetMovieRequest() )
     } )
-)( MovieDetail )
+)( injectIntl( MovieDetail ) )

@@ -8,6 +8,7 @@ export default {
             r: 'json',
             page: 1
         },
-        error: {}
+        listError: {},
+        detailError: {}
     }
 }
