@@ -104,9 +104,11 @@ class MovieDetail extends Component {
                         <Row>
                             <Col
                                 md={5}
+                                className="info"
                             >
                                 <Col
                                     md={12}
+                                    className="brief-info"
                                 >
                                     <span>
                                         {Runtime}
@@ -122,6 +124,7 @@ class MovieDetail extends Component {
                                 </Col>
                                 <Col
                                     md={12}
+                                    className="title"
                                 >
                                     <h1>
                                         {Title}
@@ -129,36 +132,37 @@ class MovieDetail extends Component {
                                 </Col>
                                 <Col
                                     md={12}
+                                    className="ratings"
                                 >
-                                    <Row>
-                                        {
-                                            Ratings && Ratings.map(
-                                                ( {
-                                                    Source,
-                                                    Value
-                                                } ) => (
-                                                    <div
-                                                        key={`${Source}-${Value}`}
-                                                    >
-                                                        <span>
-                                                            {Source}
-                                                        </span>
-                                                        <br />
-                                                        <span>
-                                                            {Value}
-                                                        </span>
-                                                    </div>
-                                                )
+                                    {
+                                        Ratings && Ratings.map(
+                                            ( {
+                                                Source,
+                                                Value
+                                            } ) => (
+                                                <div
+                                                    key={`${Source}-${Value}`}
+                                                >
+                                                    <p>
+                                                        {Source}
+                                                    </p>
+                                                    <p>
+                                                        {Value}
+                                                    </p>
+                                                </div>
                                             )
-                                        }
-                                    </Row>
+                                        )
+                                    }
                                 </Col>
                                 <Col
                                     md={12}
+                                    className="plot"
                                 >
-                                    <FormattedMessage
-                                        id="movieDetailPlot"
-                                    />
+                                    <h4>
+                                        <FormattedMessage
+                                            id="movieDetailPlot"
+                                        />
+                                    </h4>
                                     <p>
                                         {Plot}
                                     </p>
@@ -169,6 +173,7 @@ class MovieDetail extends Component {
                                     <Row>
                                         <Col
                                             md={4}
+                                            className="cast"
                                         >
                                             <h4>
                                                 <FormattedMessage
@@ -181,6 +186,7 @@ class MovieDetail extends Component {
                                         </Col>
                                         <Col
                                             md={4}
+                                            className="genre"
                                         >
                                             <h4>
                                                 <FormattedMessage
@@ -193,6 +199,7 @@ class MovieDetail extends Component {
                                         </Col>
                                         <Col
                                             md={4}
+                                            className="director"
                                         >
                                             <h4>
                                                 <FormattedMessage
