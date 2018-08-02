@@ -2,10 +2,14 @@ import { ajax } from 'rxjs/ajax'
 import { stringify } from 'query-string'
 import { RFC } from './errors'
 
+const defaultQueryParams = {
+    apikey: '42a1d080'
+}
+
 class Api {
     get( { uri = '', params = {}, headers = {} } ) {
         return ajax.getJSON(
-            `${uri}?${stringify( params )}`,
+            `${uri}?${stringify( { ...defaultQueryParams, ...params } )}`,
             headers
         )
     }

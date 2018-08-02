@@ -40,7 +40,7 @@ const epicMiddleware = createEpicMiddleware()
 export const store = createStore(
     persistReducer( persistConfig, reducers ),
     initialState,
-    compose(
+    ( window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose )(
         applyMiddleware( epicMiddleware )
     )
 )

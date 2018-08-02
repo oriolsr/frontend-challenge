@@ -1,12 +1,13 @@
 export default {
     movies: {
         list: [],
-        details: {},
+        detail: {},
         search: {
             s: '',
             type: 'movie',
             r: 'json',
-            page: 20
-        }
+            page: 1
+        },
+        error: {}
     }
 }

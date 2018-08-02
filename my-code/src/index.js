@@ -9,6 +9,8 @@ import App from './App'
 import { store, persistor } from 'store/store'
 import registerServiceWorker from './registerServiceWorker'
 
+persistor.pause()
+
 ReactDOM.render(
     (
         <Provider
