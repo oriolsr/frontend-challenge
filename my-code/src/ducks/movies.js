@@ -21,6 +21,8 @@ const GET_MOVIE_SUCCESS = 'GET_MOVIE_SUCCESS'
 const GET_MOVIE_ERROR = 'GET_MOVIE_ERROR'
 const GET_MOVIE_CANCEL = 'GET_MOVIE_CANCEL'
 
+const TOGGLE_MOVIE_FAVOURITE = 'TOGGLE_MOVIE_FAVOURITE'
+
 const { movies: { search: defaultParams } } = initialState
 export const fetchMovies = ( searchParams = defaultParams ) => ( { type: GET_MOVIES, searchParams } )
 export const fetchMoviesSuccess = list => ( { type: GET_MOVIES_SUCCESS, list, lastUpdated: Date.now() } )
@@ -31,6 +33,8 @@ export const fetchMovie = movieId => ( { type: GET_MOVIE, movieId } )
 export const fetchMovieSuccess = detail => ( { type: GET_MOVIE_SUCCESS, detail, lastUpdated: Date.now() } )
 export const fetchMovieError = detailError => ( { type: GET_MOVIE_ERROR, detailError } )
 export const cancelGetMovieRequest = () => ( { type: GET_MOVIE_CANCEL } )
+
+export const toggleMovieFavourite = id => ( { type: TOGGLE_MOVIE_FAVOURITE, id } )
 
 
 export default {
@@ -137,6 +141,14 @@ export default {
             ...state,
             detailError,
             isFetching: false
+        } ),
+
+        [TOGGLE_MOVIE_FAVOURITE]: ( state, { id } ) => ( {
+            ...state,
+            favourites: {
+                ...state.favourites,
+                [id]: !state.favourites[id]
+            }
         } )
     }
 }

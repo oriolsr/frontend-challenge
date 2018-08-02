@@ -9,7 +9,7 @@ import Icon from 'antd/lib/icon'
 import 'antd/lib/icon/style/css'
 import { MovieCard } from 'components'
 import NoResultsImage from 'assets/search/illustration-empty-state.png'
-import { fetchMovies, cancelGetMoviesRequest } from 'ducks/movies'
+import { fetchMovies, cancelGetMoviesRequest, toggleMovieFavourite } from 'ducks/movies'
 import './MovieSearch.less'
 
 class MovieSearch extends Component {
@@ -18,8 +18,10 @@ class MovieSearch extends Component {
         moviesList: PropTypes.array,
         moviesSearch: PropTypes.object,
         moviesFetching: PropTypes.bool,
+        moviesFavourites: PropTypes.object,
         cancelGetMoviesRequest: PropTypes.func,
         fetchMovies: PropTypes.func,
+        toggleMovieFavourite: PropTypes.func,
         intl: intlShape.isRequired
     }
 
@@ -35,11 +37,13 @@ class MovieSearch extends Component {
             moviesSearch: { s },
             moviesList,
             moviesFetching,
+            moviesFavourites,
             intl: {
                 messages: {
                     movieSearchErrorImageAlt
                 }
-            }
+            },
+            toggleMovieFavourite // eslint-disable-line no-shadow
         } = this.props
 
         return (
@@ -79,6 +83,8 @@ class MovieSearch extends Component {
                                     Poster={Poster}
                                     Year={Year}
                                     imdbID={imdbID}
+                                    toggleMovieFavourite={toggleMovieFavourite}
+                                    markedAsfavourite={moviesFavourites[imdbID]}
                                 />
                             )
                         )
@@ -122,16 +128,19 @@ export default connect(
             list,
             search,
             listError,
-            isFetching
+            isFetching,
+            favourites
         }
     } ) => ( {
         moviesList: list,
         moviesSearch: search,
         moviesError: listError,
-        moviesFetching: isFetching
+        moviesFetching: isFetching,
+        moviesFavourites: favourites
     } ),
     dispatch => ( {
         fetchMovies: ( ...args ) => dispatch( fetchMovies( ...args ) ),
-        cancelGetMoviesRequest: () => dispatch( cancelGetMoviesRequest() )
+        cancelGetMoviesRequest: () => dispatch( cancelGetMoviesRequest() ),
+        toggleMovieFavourite: ( ...args ) => dispatch( toggleMovieFavourite( ...args ) )
     } )
 )( injectIntl( MovieSearch ) )

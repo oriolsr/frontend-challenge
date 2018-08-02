@@ -10,5 +10,6 @@ export default {
     movieDetailDirector: 'Director',
     movieDetailMovieLoading: 'Loading...',
     movieDetailMovieNotFound: 'Movie not found',
+    movieDetailMarkAsFavourite: 'Add to favourites',
     movieCardMarkAsFavouriteImageAlt: 'Mark as favourite'
 }

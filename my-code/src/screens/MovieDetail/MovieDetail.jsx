@@ -4,11 +4,22 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl'
 import { Grid, Row, Col } from 'react-flexbox-grid'
+import Button from 'antd/lib/button'
+import 'antd/lib/button/style/css'
 import GoBackImage from 'assets/icons/icon-arrow-grey.svg'
 import ImageNotFound from 'assets/search/movie-card-image-not-found.gif'
+import LogoIMDB from 'assets/logos/logo-imdb.svg'
+import LogoRottenTomatoes from 'assets/logos/logo-rotten-tomatoes.svg'
+import snakeCase from 'lodash/fp/snakeCase'
 import { fetchMovie, fetchMovieSuccess as clearMovie, cancelGetMovieRequest } from 'ducks/movies'
 
 import './MovieDetail.less'
+import { toggleMovieFavourite } from '../../ducks/movies'
+
+const RATINGS_ICONS = {
+    'Internet Movie Database': LogoIMDB,
+    'Rotten Tomatoes': LogoRottenTomatoes
+}
 
 class MovieDetail extends Component {
     static propTypes = {
@@ -20,6 +31,9 @@ class MovieDetail extends Component {
         fetchMovie: PropTypes.func,
         clearMovie: PropTypes.func,
         cancelGetMovieRequest: PropTypes.func,
+
+        markedAsfavourite: PropTypes.bool,
+        toggleMovieFavourite: PropTypes.func,
 
         intl: intlShape.isRequired
     }
@@ -48,6 +62,7 @@ class MovieDetail extends Component {
     render() {
         const {
             movieDetail: {
+                imdbID,
                 Title,
                 Ratings,
                 Plot,
@@ -65,7 +80,9 @@ class MovieDetail extends Component {
                 }
             },
             movieError,
-            isFetching
+            isFetching,
+            markedAsfavourite,
+            toggleMovieFavourite // eslint-disable-line no-shadow
         } = this.props
 
         const {
@@ -140,19 +157,37 @@ class MovieDetail extends Component {
                                                 Source,
                                                 Value
                                             } ) => (
-                                                <div
-                                                    key={`${Source}-${Value}`}
-                                                >
-                                                    <p>
-                                                        {Source}
-                                                    </p>
-                                                    <p>
-                                                        {Value}
-                                                    </p>
-                                                </div>
+                                                RATINGS_ICONS[Source] ? (
+                                                    <div
+                                                        key={`${Source}-${Value}`}
+                                                    >
+                                                        <p
+                                                            className={`rating-${snakeCase( Source )}`}
+                                                        >
+                                                            <img
+                                                                src={RATINGS_ICONS[Source]}
+                                                                alt={Source}
+                                                            />
+                                                        </p>
+                                                        <p>
+                                                            {Value}
+                                                        </p>
+                                                    </div>
+                                                ) : null
                                             )
                                         )
                                     }
+                                    <div>
+                                        <Button
+                                            icon={markedAsfavourite ? 'heart' : 'heart-o'}
+                                            onClick={() => toggleMovieFavourite( imdbID )}
+                                            type="danger"
+                                        >
+                                            <FormattedMessage
+                                                id="movieDetailMarkAsFavourite"
+                                            />
+                                        </Button>
+                                    </div>
                                 </Col>
                                 <Col
                                     md={12}
@@ -248,16 +283,25 @@ connect(
         movies: {
             detail,
             detailError,
-            isFetching
+            isFetching,
+            favourites
+        }
+    }, {
+        match: {
+            params: {
+                movieId
+            }
         }
     } ) => ( {
         movieDetail: detail,
         movieError: !!Object.keys( detailError ).length,
-        isFetching
+        isFetching,
+        markedAsfavourite: favourites[movieId]
     } ),
     dispatch => ( {
         fetchMovie: ( ...args ) => dispatch( fetchMovie( ...args ) ),
         clearMovie: () => dispatch( clearMovie( {} ) ),
-        cancelGetMovieRequest: () => dispatch( cancelGetMovieRequest() )
+        cancelGetMovieRequest: () => dispatch( cancelGetMovieRequest() ),
+        toggleMovieFavourite: ( ...args ) => dispatch( toggleMovieFavourite( ...args ) )
     } )
 )( injectIntl( MovieDetail ) )

@@ -9,6 +9,7 @@ export default {
             page: 1
         },
         listError: {},
-        detailError: {}
+        detailError: {},
+        favourites: {}
     }
 }

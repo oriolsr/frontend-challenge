@@ -6,6 +6,7 @@ import { Col } from 'react-flexbox-grid'
 import Card from 'antd/lib/card'
 import 'antd/lib/card/style/css'
 import IconHeartGrey from 'assets/icons/icon-heart-white.svg'
+import IconHeartFull from 'assets/icons/icon-heart-full.svg'
 import ImageNotFound from 'assets/search/movie-card-image-not-found.gif'
 
 import './MovieCard.less'
@@ -16,7 +17,9 @@ class MovieCard extends Component {
         Poster: PropTypes.string,
         Year: PropTypes.string,
         imdbID: PropTypes.string,
-        intl: intlShape.isRequired
+        intl: intlShape.isRequired,
+        markedAsfavourite: PropTypes.bool,
+        toggleMovieFavourite: PropTypes.func
     }
 
     state = {
@@ -34,7 +37,9 @@ class MovieCard extends Component {
                 messages: {
                     movieCardMarkAsFavouriteImageAlt
                 }
-            }
+            },
+            markedAsfavourite,
+            toggleMovieFavourite
         } = this.props
 
         const {
@@ -78,9 +83,14 @@ class MovieCard extends Component {
                                     className="header"
                                 >
                                     <img // eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions, max-len
-                                        src={IconHeartGrey}
+                                        src={(
+                                            markedAsfavourite ? IconHeartFull : IconHeartGrey
+                                        )}
                                         alt={movieCardMarkAsFavouriteImageAlt}
-                                        onClick={e => e.preventDefault()}
+                                        onClick={( e ) => {
+                                            e.preventDefault()
+                                            toggleMovieFavourite( imdbID )
+                                        }}
                                     />
                                 </div>
                                 <div
