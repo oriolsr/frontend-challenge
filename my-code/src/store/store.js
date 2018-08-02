@@ -40,7 +40,7 @@ const epicMiddleware = createEpicMiddleware()
 export const store = createStore(
     persistReducer( persistConfig, reducers ),
     initialState,
-    ( window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose )(
+    ( window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose )( // eslint-disable-line no-underscore-dangle
         applyMiddleware( epicMiddleware )
     )
 )

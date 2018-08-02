@@ -55,7 +55,7 @@ export default {
                         retryWhen( () => fromEvent( navigator, 'onLine' ) ),
                         takeUntil( action$.ofType( GET_MOVIES_CANCEL ) ),
                         catchError(
-                            response => of(
+                            () => of(
                                 fetchMoviesError( { action: GET_MOVIES } )
                             )
                         )
@@ -84,7 +84,7 @@ export default {
                         retryWhen( () => fromEvent( navigator, 'onLine' ) ),
                         takeUntil( action$.ofType( GET_MOVIE_CANCEL ) ),
                         catchError(
-                            response => of(
+                            () => of(
                                 fetchMoviesError( { action: GET_MOVIE } )
                             )
                         )

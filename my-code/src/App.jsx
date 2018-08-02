@@ -1,16 +1,15 @@
 import React, { Component } from 'react'
 import {
     Route,
-    Link,
     Switch,
     Redirect
 } from 'react-router-dom'
 import { Grid, Row, Col } from 'react-flexbox-grid'
 import { MovieSearch, MovieDetail } from 'screens'
 import logo from 'assets/logos/logo.png'
-import './App.css'
+import './App.less'
 
-class App extends Component {
+class App extends Component { // eslint-disable-line react/prefer-stateless-function
     render() {
         return (
             <Grid

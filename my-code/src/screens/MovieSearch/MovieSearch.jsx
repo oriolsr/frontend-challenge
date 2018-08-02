@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom'
 
 import { fetchMovies, cancelGetMoviesRequest } from 'ducks/movies'
-import './MovieSearch.css'
+import './MovieSearch.less'
 
 class MovieSearch extends Component {
     static propTypes = {
@@ -19,14 +19,14 @@ class MovieSearch extends Component {
     }
 
     componentWillUnmount() {
-        const { cancelGetMoviesRequest } = this.props
+        const { cancelGetMoviesRequest } = this.props // eslint-disable-line no-shadow
 
         cancelGetMoviesRequest()
     }
 
     render() {
         const {
-            fetchMovies, moviesList, moviesError
+            fetchMovies, moviesList // eslint-disable-line no-shadow
         } = this.props
 
         return (
@@ -35,7 +35,9 @@ class MovieSearch extends Component {
                 className="movie-search"
             >
                 <Row>
-                    <Col>
+                    <Col
+                        md={12}
+                    >
                         <input
                             type="text"
                             onChange={e => fetchMovies( { s: e.target.value } )}

@@ -18,7 +18,7 @@ class MovieDetail extends Component {
 
     componentWillMount() {
         const {
-            fetchMovie,
+            fetchMovie, // eslint-disable-line no-shadow
             match: { params: { movieId } }
         } = this.props
 
@@ -26,14 +26,13 @@ class MovieDetail extends Component {
     }
 
     componentWillUnmount() {
-        const { cancelGetMovieRequest } = this.props
+        const { cancelGetMovieRequest } = this.props // eslint-disable-line no-shadow
 
         cancelGetMovieRequest()
     }
 
     render() {
         const {
-            isFetching,
             movieDetail: {
                 Title,
                 Ratings,
@@ -45,9 +44,7 @@ class MovieDetail extends Component {
                 Year,
                 Runtime,
                 Rated
-            },
-            fetchMovie,
-            movieError
+            }
         } = this.props
 
         return (
