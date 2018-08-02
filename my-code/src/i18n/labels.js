@@ -8,5 +8,7 @@ export default {
     movieDetailCast: 'Cast',
     movieDetailGenre: 'Genre',
     movieDetailDirector: 'Director',
+    movieDetailMovieLoading: 'Loading...',
+    movieDetailMovieNotFound: 'Movie not found',
     movieCardMarkAsFavouriteImageAlt: 'Mark as favourite'
 }

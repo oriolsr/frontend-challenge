@@ -63,7 +63,9 @@ class MovieDetail extends Component {
                 messages: {
                     movieDetailGoBackImageAlt
                 }
-            }
+            },
+            movieError,
+            isFetching
         } = this.props
 
         const {
@@ -78,142 +80,154 @@ class MovieDetail extends Component {
             >
                 <Row>
                     <Col
-                        md={5}
+                        md={12}
+                        className="navigation"
                     >
-                        <Col
-                            md={12}
-                            className="navigation"
+                        <Link
+                            to="/"
                         >
-                            <Link
-                                to="/"
-                            >
-                                <img
-                                    src={GoBackImage}
-                                    alt={movieDetailGoBackImageAlt}
-                                />
-                            </Link>
-                        </Col>
-                        <Col
-                            md={12}
-                        >
-                            <span>
-                                {Runtime}
-                            </span>
-                            ·
-                            <span>
-                                {Year}
-                            </span>
-                            ·
-                            <span>
-                                {Rated}
-                            </span>
-                        </Col>
-                        <Col
-                            md={12}
-                        >
-                            <h1>
-                                {Title}
-                            </h1>
-                        </Col>
-                        <Col
-                            md={12}
-                        >
-                            <Row>
-                                {
-                                    Ratings && Ratings.map(
-                                        ( {
-                                            Source,
-                                            Value
-                                        } ) => (
-                                            <div>
-                                                <span>
-                                                    {Source}
-                                                </span>
-                                                <br />
-                                                <span>
-                                                    {Value}
-                                                </span>
-                                            </div>
-                                        )
-                                    )
-                                }
-                            </Row>
-                        </Col>
-                        <Col
-                            md={12}
-                        >
-                            <FormattedMessage
-                                id="movieDetailPlot"
+                            <img
+                                src={GoBackImage}
+                                alt={movieDetailGoBackImageAlt}
                             />
-                            <p>
-                                {Plot}
-                            </p>
-                        </Col>
-                        <Col
-                            md={12}
-                        >
-                            <Row>
-                                <Col
-                                    md={4}
-                                >
-                                    <h4>
-                                        <FormattedMessage
-                                            id="movieDetailCast"
-                                        />
-                                    </h4>
-                                    <p>
-                                        {Actors}
-                                    </p>
-                                </Col>
-                                <Col
-                                    md={4}
-                                >
-                                    <h4>
-                                        <FormattedMessage
-                                            id="movieDetailGenre"
-                                        />
-                                    </h4>
-                                    <p>
-                                        {Genre}
-                                    </p>
-                                </Col>
-                                <Col
-                                    md={4}
-                                >
-                                    <h4>
-                                        <FormattedMessage
-                                            id="movieDetailDirector"
-                                        />
-                                    </h4>
-                                    <p>
-                                        {Director}
-                                    </p>
-                                </Col>
-                            </Row>
-                        </Col>
-                    </Col>
-                    <Col
-                        md={2}
-                    />
-                    <Col
-                        md={5}
-                    >
-                        <img
-                            src={(
-                                imgLoaded && !imgError ? Poster : ( // eslint-disable-line no-nested-ternary
-                                    imgError ? ImageNotFound : Poster
-                                )
-                            )}
-                            onLoad={() => this.setState( { imgLoaded: true } )}
-                            onError={() => this.setState( { imgError: true } )}
-                            alt={Title}
-                            style={{
-                                width: '100%',
-                                maxWidth: '100%'
-                            }}
-                        />
+                        </Link>
                     </Col>
                 </Row>
+                {
+                    isFetching || movieError ? (
+                        <FormattedMessage
+                            id={
+                                isFetching ? 'movieDetailMovieLoading' : 'movieDetailMovieNotFound'
+                            }
+                        />
+                    ) : (
+                        <Row>
+                            <Col
+                                md={5}
+                            >
+                                <Col
+                                    md={12}
+                                >
+                                    <span>
+                                        {Runtime}
+                                    </span>
+                                ·
+                                    <span>
+                                        {Year}
+                                    </span>
+                                ·
+                                    <span>
+                                        {Rated}
+                                    </span>
+                                </Col>
+                                <Col
+                                    md={12}
+                                >
+                                    <h1>
+                                        {Title}
+                                    </h1>
+                                </Col>
+                                <Col
+                                    md={12}
+                                >
+                                    <Row>
+                                        {
+                                            Ratings && Ratings.map(
+                                                ( {
+                                                    Source,
+                                                    Value
+                                                } ) => (
+                                                    <div>
+                                                        <span>
+                                                            {Source}
+                                                        </span>
+                                                        <br />
+                                                        <span>
+                                                            {Value}
+                                                        </span>
+                                                    </div>
+                                                )
+                                            )
+                                        }
+                                    </Row>
+                                </Col>
+                                <Col
+                                    md={12}
+                                >
+                                    <FormattedMessage
+                                        id="movieDetailPlot"
+                                    />
+                                    <p>
+                                        {Plot}
+                                    </p>
+                                </Col>
+                                <Col
+                                    md={12}
+                                >
+                                    <Row>
+                                        <Col
+                                            md={4}
+                                        >
+                                            <h4>
+                                                <FormattedMessage
+                                                    id="movieDetailCast"
+                                                />
+                                            </h4>
+                                            <p>
+                                                {Actors}
+                                            </p>
+                                        </Col>
+                                        <Col
+                                            md={4}
+                                        >
+                                            <h4>
+                                                <FormattedMessage
+                                                    id="movieDetailGenre"
+                                                />
+                                            </h4>
+                                            <p>
+                                                {Genre}
+                                            </p>
+                                        </Col>
+                                        <Col
+                                            md={4}
+                                        >
+                                            <h4>
+                                                <FormattedMessage
+                                                    id="movieDetailDirector"
+                                                />
+                                            </h4>
+                                            <p>
+                                                {Director}
+                                            </p>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                            </Col>
+                            <Col
+                                md={2}
+                            />
+                            <Col
+                                md={5}
+                            >
+                                <img
+                                    src={(
+                                        imgLoaded && !imgError ? Poster : ( // eslint-disable-line no-nested-ternary
+                                            imgError ? ImageNotFound : Poster
+                                        )
+                                    )}
+                                    onLoad={() => this.setState( { imgLoaded: true } )}
+                                    onError={() => this.setState( { imgError: true } )}
+                                    alt={Title}
+                                    style={{
+                                        width: '100%',
+                                        maxWidth: '100%'
+                                    }}
+                                />
+                            </Col>
+                        </Row>
+                    )
+                }
             </Grid>
         )
     }
@@ -229,7 +243,7 @@ connect(
         }
     } ) => ( {
         movieDetail: detail,
-        movieError: detailError,
+        movieError: !!Object.keys( detailError ).length,
         isFetching
     } ),
     dispatch => ( {

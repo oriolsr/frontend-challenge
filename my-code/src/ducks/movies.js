@@ -112,6 +112,7 @@ export default {
             list,
             lastUpdated,
             error: null,
+            listError: {},
             isFetching: false
         } ),
 
@@ -130,6 +131,7 @@ export default {
         [GET_MOVIE_SUCCESS]: ( state, { detail } ) => ( {
             ...state,
             detail,
+            detailError: {},
             isFetching: false
         } ),
 
