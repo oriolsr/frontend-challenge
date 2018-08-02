@@ -3,7 +3,7 @@
 */
 import { fromEvent, of } from 'rxjs'
 import {
-    map, catchError, debounceTime, switchMap, retryWhen, take, takeUntil
+    map, catchError, debounceTime, switchMap, retryWhen, takeUntil
 } from 'rxjs/operators'
 import { ofType } from 'redux-observable'
 
@@ -47,13 +47,12 @@ export default {
                     } ).pipe(
                         map(
                             ( { Error, Search } ) => Error ? (
-                                fetchMoviesError( Error )
+                                fetchMoviesError( { action: GET_MOVIES } )
                             ) : (
                                 fetchMoviesSuccess( Search )
                             )
                         ),
-                        take( 1 ),
-                        retryWhen( () => fromEvent( navigator, 'onLine' ) ),
+                        retryWhen( () => fromEvent( window, 'online' ) ),
                         takeUntil( action$.ofType( GET_MOVIES_CANCEL ) ),
                         catchError(
                             () => of(
@@ -77,13 +76,12 @@ export default {
                     } ).pipe(
                         map(
                             ( { Error, ...detail } ) => Error ? (
-                                fetchMovieError( Error )
+                                fetchMovieError( { action: GET_MOVIE } )
                             ) : (
                                 fetchMovieSuccess( detail )
                             )
                         ),
-                        take( 1 ),
-                        retryWhen( () => fromEvent( navigator, 'onLine' ) ),
+                        retryWhen( () => fromEvent( window, 'online' ) ),
                         takeUntil( action$.ofType( GET_MOVIE_CANCEL ) ),
                         catchError(
                             () => of(

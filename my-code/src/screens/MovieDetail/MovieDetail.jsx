@@ -12,7 +12,7 @@ import './MovieDetail.less'
 
 class MovieDetail extends Component {
     static propTypes = {
-        movieError: PropTypes.object,
+        movieError: PropTypes.bool,
         movieDetail: PropTypes.object,
         match: PropTypes.object,
         isFetching: PropTypes.bool,
@@ -137,7 +137,9 @@ class MovieDetail extends Component {
                                                     Source,
                                                     Value
                                                 } ) => (
-                                                    <div>
+                                                    <div
+                                                        key={`${Source}-${Value}`}
+                                                    >
                                                         <span>
                                                             {Source}
                                                         </span>
