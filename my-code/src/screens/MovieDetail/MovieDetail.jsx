@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl'
 import { Grid, Row, Col } from 'react-flexbox-grid'
 import GoBackImage from 'assets/icons/icon-arrow-grey.svg'
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl'
+import ImageNotFound from 'assets/search/movie-card-image-not-found.gif'
 import { fetchMovie, fetchMovieSuccess as clearMovie, cancelGetMovieRequest } from 'ducks/movies'
 
 import './MovieDetail.less'
@@ -21,6 +22,11 @@ class MovieDetail extends Component {
         cancelGetMovieRequest: PropTypes.func,
 
         intl: intlShape.isRequired
+    }
+
+    state = {
+        imgLoaded: false,
+        imgError: false
     }
 
     componentWillMount() {
@@ -60,6 +66,11 @@ class MovieDetail extends Component {
             }
         } = this.props
 
+        const {
+            imgLoaded,
+            imgError
+        } = this.state
+
         return (
             <Grid
                 fluid
@@ -71,6 +82,7 @@ class MovieDetail extends Component {
                     >
                         <Col
                             md={12}
+                            className="navigation"
                         >
                             <Link
                                 to="/"
@@ -187,7 +199,13 @@ class MovieDetail extends Component {
                         md={5}
                     >
                         <img
-                            src={Poster}
+                            src={(
+                                imgLoaded && !imgError ? Poster : ( // eslint-disable-line no-nested-ternary
+                                    imgError ? ImageNotFound : Poster
+                                )
+                            )}
+                            onLoad={() => this.setState( { imgLoaded: true } )}
+                            onError={() => this.setState( { imgError: true } )}
                             alt={Title}
                             style={{
                                 width: '100%',

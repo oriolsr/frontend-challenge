@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import { injectIntl, intlShape } from 'react-intl'
 import { Col } from 'react-flexbox-grid'
 import Card from 'antd/lib/card'
 import 'antd/lib/card/style/css'
 import IconHeartGrey from 'assets/icons/icon-heart-white.svg'
 import ImageNotFound from 'assets/search/movie-card-image-not-found.gif'
-import { injectIntl, intlShape } from 'react-intl'
 
 import './MovieCard.less'
 
